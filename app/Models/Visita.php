@@ -16,6 +16,12 @@ class Visita extends Model
         'user_id',
     ];
 
+    public function puedeVerRespuestas() 
+    {
+        return $this->testVersion->respuestas;
+    }
+
+
     public function user() 
     {
         return $this->belongsTo(User::class);

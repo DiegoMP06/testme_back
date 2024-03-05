@@ -13,7 +13,7 @@ class TestVersionResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {
+    { 
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
@@ -31,8 +31,10 @@ class TestVersionResource extends JsonResource
             'instrucciones' => $this->when($request->wInstructions, $this->instructions),
             'campos' => $this->when($request->wCampos, PreguntaResource::collection($this->preguntas()->where('campo_extra', 0)->get())),
             'camposExtra' => $this->when($request->wCamposExtra, PreguntaResource::collection($this->preguntas()->where('campo_extra', 1)->get())),
-            'visita' => $this->when($request->wVisita && $this->existeVisita(), $this->visitas->where('user_id', auth()->user()->id)),
-            'user' => $this->when($request->wUserVersion, $this->test->user),
+            'visita' => $this->when($request->wVisita && $this->existeVisita(), VisitaResource::collection($this->visitas()->where('user_id', auth()->user()->id)->get())),
+            'user' => $this->when($request->wUserVersion, UserResource::collection([$this->test->user])[0]),
+            'enlace'=> $this->when($request->wEnlaceTest && $this->estaEnlazado($request->sala->id ?? null), $this->testSalas()->where('sala_id', $request->sala->id ?? null)->get()),
+            'pivot' => $this->when($this->pivot, $this->pivot ?? null),
         ];
     }
 }

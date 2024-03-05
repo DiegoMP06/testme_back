@@ -21,8 +21,31 @@ class Sala extends Model
         'user_id',
     ];
 
+    public function numProfesores() 
+    {
+        return $this->userSalas()->where('profesor', 1)->count();
+    }
+
+    public function numAlumnos() 
+    {
+        return $this->userSalas()->where('profesor', 0)->count();
+    }
+
     public function existeEnlace() {
         return $this->userSalas->contains('user_id', auth()->user()->id);
+    }
+
+    public function esProfesor() 
+    {
+        return $this->userSalas()
+            ->where('user_id', auth()->user()->id)
+            ->where('profesor', 1)
+            ->get()->count() > 0 || auth()->user()->salas->contains('id', $this->id);
+    }
+
+    public function testEnlazado($test_id) 
+    {
+        return $this->testSalas->contains('test_version_id', $test_id);
     }
 
     public function userSalas() 
@@ -30,13 +53,23 @@ class Sala extends Model
         return $this->hasMany(UserSala::class);
     }
 
+    public function testSalas()
+    {
+        return $this->hasMany(TestSala::class);
+    }
+
     public function usuarios()
     {
-        return $this->belongsToMany(User::class, 'user_salas');
+        return $this->belongsToMany(User::class, 'user_salas')->withPivot(['id', 'profesor']);
+    }
+
+    public function tests() 
+    {
+        return $this->belongsToMany(TestVersion::class, 'test_salas')->withPivot(['id']);
     }
 
     public function user() 
     {
-        return $this->belongsTo(User::class)->select(['id', "name", 'apellido_paterno', "apellido_materno", 'usuario', 'imagen']);
+        return $this->belongsTo(User::class);
     }
 }

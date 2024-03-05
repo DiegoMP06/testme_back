@@ -25,6 +25,11 @@ class TestVersion extends Model
     {
         return $this->visitas->contains('user_id', auth()->user()->id);
     }
+
+    public function estaEnlazado($sala_id) 
+    {
+        return $this->testSalas->contains('sala_id', $sala_id);
+    }
  
     public function test() 
     {
@@ -59,5 +64,10 @@ class TestVersion extends Model
     public function visitas() 
     {
         return $this->hasMany(Visita::class);
+    }
+
+    public function testSalas()
+    {
+        return $this->hasMany(TestSala::class);
     }
 }

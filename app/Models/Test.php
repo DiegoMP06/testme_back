@@ -21,6 +21,6 @@ class Test extends Model
 
     public function user() 
     {
-        return $this->belongsTo(User::class)->select(['id', "name", 'apellido_paterno', "apellido_materno", 'usuario', 'imagen']);
+        return $this->belongsTo(User::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TestVersionCollection;
 use App\Models\Test;
 use App\Models\TestVersion;
 use Illuminate\Http\Request;
@@ -14,7 +15,6 @@ class TestVersionController extends Controller
      */
     public function index(Test $test)
     {
-        //
     }
 
     /**
@@ -36,28 +36,32 @@ class TestVersionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TestVersion $testVersion, Test $test)
+    public function update(Request $request, Test $test, TestVersion $testVersion)
     {
         $this->authorize('update', $test);
 
         $datos = $this->validate($request, [
+            'nombre' => 'nullable|max:100',
+            'descripcion' => 'nullable|min:50|max:1000',
+            'categoria_id' => 'nullable|numeric',
             'respuestas' => 'nullable|boolean',
             'publico' => 'nullable|boolean',
         ]);
 
+        $testVersion->nombre  = isset($datos['nombre']) ? $datos['nombre'] : $testVersion->nombre;
+        $testVersion->descripcion  = isset($datos['descripcion']) ? $datos['descripcion'] : $testVersion->descripcion;
+        $testVersion->categoria_id  = isset($datos['categoria_id']) ? $datos['categoria_id'] : $testVersion->categoria_id;
         $testVersion->respuestas  = isset($datos['respuestas']) ? $datos['respuestas'] : $testVersion->respuestas;
         $testVersion->publico  = isset($datos['publico']) ? $datos['publico'] : $testVersion->publico;
         $testVersion->save();
 
-        return response()->json([
-            'version' => $testVersion,
-        ]);
+        return new TestVersionCollection([$testVersion]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TestVersion $testVersion, Test $test)
+    public function destroy(Test $test, TestVersion $testVersion)
     {
         $this->authorize('delete', $test);
 

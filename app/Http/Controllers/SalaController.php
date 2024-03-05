@@ -96,6 +96,10 @@ class SalaController extends Controller
      */
     public function destroy(Sala $sala)
     {
-        //
+        $this->authorize('delete', $sala);
+
+        $sala->delete();    
+
+        return response()->json(['sala' => null]);
     }
 }

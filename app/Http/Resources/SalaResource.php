@@ -25,9 +25,10 @@ class SalaResource extends JsonResource
             'user_id' => $this->user_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'user' => $this->when($request->wUserSala, $this->user),
-            'alumnos' => $this->when($request->wAlumnosSala, $this->usuarios()->where('profesor', 0)->get()),
-            'profesores' => $this->when($request->wProfesoresSala, $this->usuarios()->where('profesor', 1)->get()),
+            'user' => $this->when($request->wUserSala, UserResource::collection([$this->user])[0]),
+            'alumnos' => $this->when($request->wAlumnosSala, $this->usuarios()->where('profesor', 0)->get()->count()),
+            'profesores' => $this->when($request->wProfesoresSala, $this->usuarios()->where('profesor', 1)->get()->count()),
+            'tests' => $this->when($request->wTestsSala, TestVersionResource::collection($this->tests)),
             'enlace' => $this->when($request->wEnlace && $this->existeEnlace(), $this->usuarios()->where('user_id', auth()->user()->id)->get()),
         ];
     }

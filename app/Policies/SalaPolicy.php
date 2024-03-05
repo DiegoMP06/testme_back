@@ -45,7 +45,7 @@ class SalaPolicy
      */
     public function delete(User $user, Sala $sala): bool
     {
-        //
+        return $user->id === $sala->user_id;
     }
 
     /**

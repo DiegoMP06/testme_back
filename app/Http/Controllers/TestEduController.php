@@ -8,6 +8,7 @@ use App\Models\Visita;
 use App\Models\TestVersion;
 use Illuminate\Http\Request;
 use App\Http\Resources\TestVersionCollection;
+use App\Http\Resources\VisitaCollection;
 use App\Models\RespuestaOpcion;
 
 class TestEduController extends Controller
@@ -60,9 +61,7 @@ class TestEduController extends Controller
             RespuestaOpcion::insert($respuestasOpciones);
         }
 
-        return response()->json([
-            'visita' => $visita,
-        ]);
+        return new VisitaCollection([$visita]);
     }
 
     /**

@@ -23,7 +23,7 @@ class TestResource extends JsonResource
             'updated_at' => $this->updated_at,
             'versiones' => $this->when($request->wVersiones, TestVersionResource::collection($this->testVersions)),
             'version' => $this->when($request->wVersion, TestVersionResource::collection([$this->testVersions[$this->testVersions->count() - 1]])),
-            'user' => $this->when($request->wUserTest, $this->user),
+            'user' => $this->when($request->wUserTest, UserResource::collection([$this->user])[0]),
         ];
     }
 }

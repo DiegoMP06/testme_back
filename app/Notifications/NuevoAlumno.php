@@ -11,12 +11,22 @@ class NuevoAlumno extends Notification
 {
     use Queueable;
 
+    public $sala_id;
+    public $sala_nombre;
+    public $user_id;
+    public $user_nombre;
+    public $user_usuario;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($sala_id, $sala_nombre, $user_id, $user_nombre, $user_usuario)
     {
-        //
+        $this->sala_id = $sala_id;
+        $this->sala_nombre = $sala_nombre;
+        $this->user_id = $user_id;
+        $this->user_nombre = $user_nombre;
+        $this->user_usuario = $user_usuario;
     }
 
     /**
@@ -35,20 +45,22 @@ class NuevoAlumno extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                    ->subject('Tienes un Nuevo Alumno')
+                    ->greeting('¡Hola!')
+                    ->line($this->user_nombre . ' <' . $this->user_usuario . '> Se ha Unido a tu Sala "' .  $this->sala_nombre . '"')
+                    ->action('Administrar Sala', $_ENV['FRONTEND_URL'] . '/dashboard/salas/' . $this->sala_id)
+                    ->line('¡Gracias Por Usar TestMe!');
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
+    public function toDatabase(object $notifiable) 
     {
         return [
-            //
+            'sala_id' => $this->sala_id,
+            'sala_nombre' => $this->sala_nombre,
+            'user_id' => $this->user_id,
+            'user_nombre' => $this->user_nombre,
+            'user_usuario' => $this->user_usuario,
+            'url' => $_ENV['FRONTEND_URL'] . '/dashboard/salas/' . $this->sala_id,
         ];
     }
 }

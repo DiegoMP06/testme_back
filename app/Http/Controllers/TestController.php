@@ -40,7 +40,7 @@ class TestController extends Controller
             'tipo_id' => 'required|numeric',
             'instrucciones' => 'required|array',
             'campos' => 'required|array',
-            'camposExtra' => 'required|array',
+            'camposExtra' => 'nullable|array',
         ]);
 
         $test = Auth::user()->tests()->create([
@@ -183,21 +183,24 @@ class TestController extends Controller
         $this->authorize('update', $test);
 
         $datos = $this->validate($request, [
-            'test' => 'required|array',
+            'nombre' => 'required|max:100',
+            'descripcion' => 'required|min:50|max:1000',
+            'categoria_id' => 'required|numeric',
+            'tipo_id' => 'required|numeric',
             'instrucciones' => 'required|array',
             'campos' => 'required|array',
-            'camposExtra' => 'required|array',
+            'camposExtra' => 'nullable|array',
         ]);
 
         $test->ultima_version = floatval($test->ultima_version) + 0.1;
         $test->save();
 
         $versionTest = $test->testVersions()->create([
-            'nombre' => $datos['test']['nombre'],
-            'descripcion' => $datos['test']['descripcion'],
+            'nombre' => $datos['nombre'],
+            'descripcion' => $datos['descripcion'],
             'version' => $test->ultima_version,
-            'categoria_id' => $datos['test']['categoria_id'],
-            'tipo_id' => $datos['test']['tipo_id'],
+            'categoria_id' => $datos['categoria_id'],
+            'tipo_id' => $datos['tipo_id'],
         ]);
 
         $instrucciones = [];

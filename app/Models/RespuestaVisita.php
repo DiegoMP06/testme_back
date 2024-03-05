@@ -19,4 +19,9 @@ class RespuestaVisita extends Model
     {
         return $this->belongsToMany(Option::class, 'respuesta_opcions');
     }
+    
+    public function pregunta() 
+    {
+        return $this->belongsTo(Pregunta::class);
+    }
 }
