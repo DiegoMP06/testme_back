@@ -19,4 +19,9 @@ class UserSala extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function sala() 
+    {
+        return $this->belongsTo(Sala::class);
+    }
 }

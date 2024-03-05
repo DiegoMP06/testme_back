@@ -19,10 +19,12 @@ class VisitaSalaResource extends JsonResource
             "puntuacion"=> $this->puntuacion,
             "total"=> $this->total,
             "user_id"=> $this->user_id,
-            "test_sala_id"=> $this->test_version_id,
+            "test_sala_id"=> $this->test_sala_id,
             "created_at"=> $this->created_at,
             "updated_at"=> $this->updated_at,
-            'respuestas' => $this->when($this->puedeVerRespuestas(), RespuestaVisitaSalaResource::collection($this->respuestaVisitaSalas)),
+            'test' => $this->when($request->wTestVersionVisitaSala, TestVersionResource::collection([$this->testSala->testVersion])[0]),
+            'sala' => $this->when($request->wSalaVisitaSala, SalaResource::collection([$this->testSala->sala])[0]),
+            'respuestas' => $this->when($this->puedeVerRespuestas() || $request->wRespuestasVisitaSala, RespuestaVisitaSalaResource::collection($this->respuestaVisitaSalas)),
         ];
     }
 }

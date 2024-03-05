@@ -9,6 +9,7 @@ use App\Http\Controllers\TipoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\SalaEduController;
+use App\Http\Controllers\SalasUserController;
 use App\Http\Controllers\SalaTestEduController;
 use App\Http\Controllers\SolicitudSalaController;
 use App\Http\Controllers\TestEduController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\TestSalaEduController;
 use App\Http\Controllers\TestVersionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSalaController;
+use App\Http\Controllers\VisitaSalaUserController;
 use App\Http\Controllers\VisitasUserController;
 use App\Http\Resources\UserCollection;
 
@@ -33,8 +35,19 @@ use App\Http\Resources\UserCollection;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
+        
         return new UserCollection([$request->user()]);
     });
+
+    
+    Route::get('/usuario/visitas', VisitasUserController::class);
+    Route::get('/usuario/visitas-salas', VisitaSalaUserController::class);
+    Route::get('/usuario/salas', SalasUserController::class);
+    
+    Route::post('/home/tests', [HomeController::class, 'tests']);
+    Route::post('/home/salas', [HomeController::class, 'salas']);
+    
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::apiResource('/categorias', CategoriaController::class);
     Route::apiResource('/tipos', TipoController::class);
@@ -49,11 +62,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/edu/salas/{sala}/test-salas/{test_sala}/visita-salas', SalaTestEduController::class);
     Route::apiResource('/salas/{sala}/test-salas', TestSalaEduController::class);
 
-    Route::get('/user/{user:usuario}', UserController::class);
-    
-    Route::post('/home/tests', [HomeController::class, 'tests']);
-    Route::post('/home/salas', [HomeController::class, 'salas']);
-    
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/usuario/{user:usuario}', UserController::class);
 });
-Route::get('/visitas', VisitasUserController::class);
