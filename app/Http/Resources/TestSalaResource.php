@@ -18,8 +18,8 @@ class TestSalaResource extends JsonResource
             "id"=> $this->id,
             "sala_id"=> $this->sala_id,
             "test_version_id"=> $this->test_version_id,
-            'sala' => SalaResource::collection([$this->sala])[0],
-            'test_version'=> TestVersionResource::collection([$this->testVersion])[0],
+            'sala' => $this->when($request->wSalaTestSala, SalaResource::collection([$this->sala])[0]),
+            'test_version'=> $this->when($request->wTestVersionTestSala, TestVersionResource::collection([$this->testVersion])[0]),
             'visitaSala' => $this->when($request->wVisitaSala && $this->existeVisitaSala(), VisitaSalaResource::collection($this->visitaSalas()->where('user_id', auth()->user()->id)->get()))
         ];
     }

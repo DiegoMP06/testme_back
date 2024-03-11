@@ -15,6 +15,9 @@ class TestVersionController extends Controller
      */
     public function index(Test $test)
     {
+        $this->authorize('viewAny', [TestVersion::class, $test]);
+
+        return new TestVersionCollection(TestVersion::where('test_id', $test->id)->orderBy('id', 'DESC')->paginate(20));
     }
 
     /**
@@ -28,9 +31,11 @@ class TestVersionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TestVersion $testVersion, Test $test)
+    public function show(Test $test, TestVersion $testVersion)
     {
-        //
+        $this->authorize('view', [$testVersion, $test]);
+
+        return new TestVersionCollection([$testVersion]);
     }
 
     /**
@@ -38,7 +43,7 @@ class TestVersionController extends Controller
      */
     public function update(Request $request, Test $test, TestVersion $testVersion)
     {
-        $this->authorize('update', $test);
+        $this->authorize('update', [$testVersion, $test]);
 
         $datos = $this->validate($request, [
             'nombre' => 'nullable|max:100',
@@ -63,10 +68,10 @@ class TestVersionController extends Controller
      */
     public function destroy(Test $test, TestVersion $testVersion)
     {
-        $this->authorize('delete', $test);
+        $this->authorize('delete', [$testVersion, $test]);
 
         $testVersion->delete();
 
-        return response()->json(['version' => null]);
+        return response()->noContent();
     }
 }

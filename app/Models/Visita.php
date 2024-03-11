@@ -21,7 +21,6 @@ class Visita extends Model
         return $this->testVersion->respuestas;
     }
 
-
     public function user() 
     {
         return $this->belongsTo(User::class);

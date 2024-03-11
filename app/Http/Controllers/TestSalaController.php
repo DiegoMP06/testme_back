@@ -14,7 +14,7 @@ class TestSalaController extends Controller
      */
     public function index(Sala $sala)
     {
-        $this->authorize("viewAny", [TestSala::class, $sala]);
+        $this->authorize("viewAny", [TestSala::class, $sala, false]);
 
         return new TestVersionCollection($sala->tests);
     }
@@ -55,7 +55,7 @@ class TestSalaController extends Controller
      */
     public function destroy(Sala $sala, TestSala $testSala)
     {
-        $this->authorize('delete', [$testSala, $sala]);
+        $this->authorize('delete', [$testSala, $sala, false]);
 
         $testSala->delete();
 

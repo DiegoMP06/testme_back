@@ -22,6 +22,7 @@ class VisitaResource extends JsonResource
             "test_version_id"=> $this->test_version_id,
             "created_at"=> $this->created_at,
             "updated_at"=> $this->updated_at,
+            'user' => $this->when($request->wUserVisita, UserResource::collection([$this->user])[0]),
             'test' => $this->when($request->wTestVersionVisita, TestVersionResource::collection([$this->testVersion])[0]),
             'respuestas' => $this->when($this->puedeVerRespuestas() || $request->wRespuestasVisita, RespuestaVisitaResource::collection($this->respuestaVisitas))
         ];

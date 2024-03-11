@@ -3,8 +3,9 @@
 namespace App\Policies;
 
 use App\Models\Sala;
-use App\Models\TestSala;
 use App\Models\User;
+use App\Models\TestSala;
+use App\Models\TestVersion;
 use Illuminate\Auth\Access\Response;
 
 class TestSalaPolicy
@@ -12,17 +13,19 @@ class TestSalaPolicy
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user, Sala $sala): bool
+    public function viewAny(User $user, Object $objeto, $testVersion = false): bool
     {
-        return $sala->acceso === 1 || $sala->user_id === $user->id || $sala->existeEnlace();
+        if($testVersion) return $objeto->test->user_id === $user->id;
+        return $objeto->acceso === 1 || $objeto->user_id === $user->id || $objeto->existeEnlace();
     }
+
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, TestSala $testSala): bool
+    public function view(User $user, TestSala $testSala, TestVersion $testVersion): bool
     {
-        //
+        return $user->id === $testVersion->test->user_id && $testSala->test_version_id === $testVersion->id;
     }
 
     /**
@@ -38,15 +41,15 @@ class TestSalaPolicy
      */
     public function update(User $user, TestSala $testSala): bool
     {
-        //
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, TestSala $testSala, Sala $sala): bool
+    public function delete(User $user, TestSala $testSala, Object $objeto, $testVersion = false): bool
     {
-        return $sala->user_id === $user->id || $testSala->esCreador();
+        if($testVersion) return $user->id === $objeto->test->user_id && $testSala->test_version_id === $objeto->id;
+        return $objeto->user_id === $user->id || $testSala->esCreador();
     }
 
     /**

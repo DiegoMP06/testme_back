@@ -20,9 +20,9 @@ class VisitaPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Visita $visita): bool
+    public function view(User $user, Visita $visita, TestVersion $testVersion): bool
     {
-        //
+        return $testVersion->id === $visita->test_version_id && $user->id === $testVersion->test->user_id;
     }
 
     /**

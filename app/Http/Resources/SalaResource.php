@@ -30,6 +30,7 @@ class SalaResource extends JsonResource
             'profesores' => $this->when($request->wProfesoresSala, $this->usuarios()->where('profesor', 1)->get()->count()),
             'tests' => $this->when($request->wTestsSala, TestVersionResource::collection($this->tests)),
             'enlace' => $this->when($request->wEnlace && $this->existeEnlace(), $this->usuarios()->where('user_id', auth()->user()->id)->get()),
+            'pivot' => $this->when($this->pivot, $this->pivot ?? null),
         ];
     }
 }

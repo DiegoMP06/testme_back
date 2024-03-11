@@ -32,6 +32,7 @@ class TestVersionResource extends JsonResource
             'campos' => $this->when($request->wCampos, PreguntaResource::collection($this->preguntas()->where('campo_extra', 0)->get())),
             'camposExtra' => $this->when($request->wCamposExtra, PreguntaResource::collection($this->preguntas()->where('campo_extra', 1)->get())),
             'visita' => $this->when($request->wVisita && $this->existeVisita(), VisitaResource::collection($this->visitas()->where('user_id', auth()->user()->id)->get())),
+            'visitas' => $this->when($request->wVisitasTest, ResultadosVisitaResource::collection($this->visitas)),
             'user' => $this->when($request->wUserVersion, UserResource::collection([$this->test->user])[0]),
             'enlace'=> $this->when($request->wEnlaceTest && $this->estaEnlazado($request->sala->id ?? null), $this->testSalas()->where('sala_id', $request->sala->id ?? null)->get()),
             'pivot' => $this->when($this->pivot, $this->pivot ?? null),
