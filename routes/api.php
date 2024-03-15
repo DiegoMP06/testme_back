@@ -20,6 +20,7 @@ use App\Http\Controllers\TestVersionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSalaController;
 use App\Http\Controllers\VisitaController;
+use App\Http\Controllers\VisitaSalaController;
 use App\Http\Controllers\VisitaSalaUserController;
 use App\Http\Controllers\VisitasUserController;
 use App\Http\Resources\UserCollection;
@@ -63,6 +64,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/edu/salas/{sala}/test-salas/{test_sala}/visita-salas', SalaTestEduController::class);
     Route::apiResource('/salas/{sala}/test-salas', TestSalaEduController::class);
     Route::apiResource('/test-versions/{test_version}/visitas', VisitaController::class);
+    Route::apiResource('/test-versions/{test_version}/test-salas/{test_sala}/visita-salas', VisitaSalaController::class);
 
     Route::get('/usuario/{user:usuario}', UserController::class);
 });
